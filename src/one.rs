@@ -1,30 +1,14 @@
-use reqwest::Client;
 use std::collections::HashMap;
 
 #[derive(Debug)]
 struct Pair(i32, i32);
 
-pub async fn solver(client: Client) -> Result<(), Box<dyn std::error::Error>> {
-    let numbers: String = client
-        .get("https://adventofcode.com/2020/day/1/input")
-        .send()
-        .await?
-        .text()
-        .await?;
-    let numbers: Vec<&str> = numbers.split("\n").collect();
+pub fn solver(input: &String) -> String {
+    let numbers: Vec<&str> = input.split("\n").collect();
     let pair: Pair = find_pair(numbers);
-    let answer: &str = &(pair.0 * pair.1).to_string();
+    let answer: String = (pair.0 * pair.1).to_string();
     println!("{:#?}, {:#?}, {:#?}", pair.0, pair.1, answer);
-    let params = [("level", "1"), ("answer", answer)];
-    let submit = client
-        .post("https://adventofcode.com/2020/day/1/answer")
-        .form(&params)
-        .send()
-        .await?
-        .text()
-        .await?;
-    println!("{:#?}", submit);
-    Ok(())
+    return answer;
 }
 
 fn find_pair(numbers: Vec<&str>) -> Pair {
