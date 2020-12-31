@@ -80,7 +80,6 @@ fn check_hcl(val: &str) -> bool {
                 _ => return false,
             }
         }
-
     }
     return val.len() == 7; 
 }

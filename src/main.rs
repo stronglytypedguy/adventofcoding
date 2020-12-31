@@ -1,7 +1,7 @@
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::Client;
 use std::env::{var};
-mod one; mod two; mod three; mod four;
+mod one; mod two; mod three; mod four; mod five;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -33,6 +33,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         answer = three::solver(&challenge_input);
     } else if i == 4 {
         answer = four::solver(&challenge_input);
+    } else if i == 5 {
+        answer = five::solver(&challenge_input);
     } else {
         panic!("Have not implemented solution");
     }
