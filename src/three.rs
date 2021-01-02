@@ -21,6 +21,7 @@ pub fn solver(input: &String) -> String {
         }
         counts.push(count);
     }
+    println!("{:?}", counts);
     let answer: u64 = counts.iter().fold(1, |acc, x| acc * x);
     println!("Finished Three, Answer: {:#?}", answer);
     return answer.to_string();

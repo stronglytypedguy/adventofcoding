@@ -66,7 +66,6 @@ fn check_hgt(val: &str) -> bool {
     return false;
 }
 fn check_hcl(val: &str) -> bool {
-    let mut characters = val.chars();
     for (i, c) in val.chars().enumerate() {
         if i == 0 {
             match c {
