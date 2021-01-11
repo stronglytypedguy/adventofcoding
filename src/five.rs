@@ -1,43 +1,41 @@
 use std::cmp;
+use std::collections::BinaryHeap;
 
 pub fn solver(input: &String) -> String {
     let seats: Vec<&str> = input.split("\n").collect();
-    let mut max = 0;
+    
+    let mut heap = BinaryHeap::new();
     for seat in seats {
-        let mut column = 0;
-        let mut row = 0;
-        let mut min_row = 0;
-        let mut max_row = 127;
-        let mut min_col = 0;
-        let mut max_col = 8;
-        for (i, c) in seat.chars().enumerate() {
-            println!("{} {} {} {} {}", c, min_row, max_row, min_col, max_col);
-            if i == 6 {
-                match c {
-                    'F' => row = max_row,
-                    'B' => row = min_row,
-                    _ => continue,
-                }
-            } else if i == 9 {
-                match c {
-                    'R' => column = max_col,
-                    'L' => column = min_col,
-                    _ => continue,
-                }
-            } else {
-                match c {
-                    'F' => max_row = (max_row + min_row) / 2,
-                    'B' => min_row = (max_row + min_row) / 2,
-                    'L' => max_col = (max_col + min_col) / 2,
-                    'R' => min_col = (max_col + min_col) / 2,
-                    _ => continue,
-                }
-            }
-        }
-        max = cmp::max(max, row * 8 + column);
-        println!("{}, {}", row, column);
+        let seat_id = calculate_seat_id(&seat);
+        heap.push(seat_id)
     }
-    return max.to_string();
+    let max = heap.pop().unwrap();
+    while heap.pop().unwrap() == heap.peek().unwrap() + 1 {
+    }
+    return format!("Max is: {}, My Seat is: {}", max, heap.peek().unwrap() + 1).to_string();
+}
+
+fn calculate_seat_id(seat: &str) -> i64 {
+    let mut lower_row = 0f64;
+    let mut upper_row = 127f64;
+    let mut lower_col = 0f64;
+    let mut upper_col = 7f64;
+    for letter in seat.chars() {
+        if letter == 'F' {
+            let half = ((lower_row + upper_row) / 2f64).floor();
+            upper_row = half;
+        } else if letter == 'B' {
+            let half = ((lower_row + upper_row) / 2f64).ceil();
+            lower_row = half;
+        } else if letter == 'L' {
+            let half = ((lower_col + upper_col) / 2f64).floor();
+            upper_col = half;
+        } else if letter == 'R' {
+            let half = ((lower_col + upper_col) / 2f64).ceil();
+            lower_col = half;
+        }
+    }
+    return ((lower_row * 8f64) + lower_col) as i64; // Note the choice of lower/upper is irrelevant since they end up being equal.
 }
 
 #[cfg(test)]
