@@ -5,9 +5,12 @@ mod one; mod two; mod three; mod four; mod five;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let session_id = var("SESSION_ID").unwrap();
+    let session_id = match var("SESSION_ID") {
+        Ok(val) => val,
+        Err(_e) => panic!("Session Environment Variable Not Present"),
+    };
     let mut headers = HeaderMap::new();
-    let session_cookie: HeaderValue = HeaderValue::from_str(&format!("session={}", session_id)).unwrap();
+    let session_cookie = HeaderValue::from_str(&format!("session={}", session_id)).unwrap();
     let cookie_header = "Cookie";
     headers.insert(cookie_header, session_cookie);
     let client = Client::builder()
